@@ -1,0 +1,28 @@
+<launch>
+
+    <arg name = "bbox_service" default = "bbox_server"/>
+    <arg name = "debug" default = "false"/>
+    <arg name = "pointcloud_in" default = "xtion/depth_registered/points"/>
+    <arg name = "pointcloud_out" default = "pointcloud_processed"/>
+    <arg name = "output_tf_frame" default = "map"/>
+
+    <arg name = "lowres_distance" default = "0.1"/>
+
+    <group>
+        <node
+            name = "pointcloud_processing"
+            pkg = "pointcloud_processing"
+            output = "screen"
+            type = "pointcloud_processing_node"
+            launch-prefix = "$(eval 'valgrind' if debug == true else '')"
+        >
+            <param name = "bbox_service" value = "$(arg bbox_service)"/>
+            <param name = "debug" value = "$(arg debug)"/>
+            <param name = "pointcloud_in" value = "$(arg pointcloud_in)"/>
+            <param name = "pointcloud_out" value = "$(arg pointcloud_out)"/>
+            <param name = "output_tf_frame" value = "$(arg output_tf_frame)"/>
+            <param name = "lowres_distance" value = "$(arg lowres_distance)"/>
+        </node>
+    </group>
+
+</launch>

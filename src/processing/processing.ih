@@ -1,0 +1,12 @@
+#include "processing.h"
+
+using namespace actionlib;
+using namespace cv;
+using namespace cv_bridge;
+using namespace pcl;
+using namespace pointcloud_processing;
+using namespace ros;
+using namespace std;
+using namespace tf;
+
+using sensor_msgs::PointCloud2;

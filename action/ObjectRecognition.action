@@ -1,0 +1,7 @@
+# Goal
+sensor_msgs/Image image
+--- #result
+int32[] bbox
+float32[] probabilities
+int32[] objects
+--- #feedback
