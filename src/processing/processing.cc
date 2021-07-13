@@ -6,7 +6,8 @@ Processing::Processing()
     d_pointcloud_out(get_param<string>("pointcloud_out")),
     d_output_tf_frame(get_param<string>("output_tf_frame")),
     d_object_recognition(d_bbox_service, true),
-    d_lowres_distance(get_param<float>("lowres_distance"))
+    d_lowres_distance(get_param<float>("lowres_distance")),
+    d_state_cloud(new pcl::PointCloud<pcl::PointXYZRGB>)
 {
     NodeHandle node;
     d_pointcloud_subscriber = node.subscribe(d_pointcloud_in, 1, &Processing::on_pointcloud, this);

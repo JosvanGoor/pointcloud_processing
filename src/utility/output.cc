@@ -1,4 +1,4 @@
-#include "utility.h"
+#include "utility.ih"
 
 char const *dtype_name(uint8_t type) noexcept
 {
@@ -16,7 +16,7 @@ char const *dtype_name(uint8_t type) noexcept
     }
 }
 
-std::ostream &operator<<(std::ostream &out, sensor_msgs::PointCloud2 const &pc) noexcept
+ostream &operator<<(ostream &out, sensor_msgs::PointCloud2 const &pc) noexcept
 {
     out << "Pointcloud2:\n";
     out << "      height: " << pc.height << "\n";

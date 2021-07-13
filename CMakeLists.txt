@@ -37,9 +37,13 @@ generate_messages(
 
 set(SOURCE_CODE
     src/main.cc
+    src/processing/accumulatehighres.cc
+    src/processing/accumulatelowres.cc
     src/processing/extractimage.cc
     src/processing/processing.cc
     src/processing/onpointcloud.cc
+    src/processing/publishstatecloud.cc
+    src/utility/nextcolor.cc
     src/utility/output.cc
 )
 

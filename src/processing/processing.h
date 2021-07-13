@@ -1,5 +1,7 @@
 #include "../common.h"
 
+#include <vector>
+
 class Processing
 {
     // relevant topics
@@ -17,13 +19,17 @@ class Processing
     // parameters
     float d_lowres_distance;
 
+    // Storage
+    pcl::PointCloud<pcl::PointXYZRGB>::Ptr d_state_cloud;
+
     public:
         Processing();
 
         void on_pointcloud(sensor_msgs::PointCloud2 const &cloud) noexcept;
 
     private:
-        cv::Mat extract_image(sensor_msgs::PointCloud2 const &cloud) const noexcept;
-
-
+        std::vector<uint8_t> extract_image(sensor_msgs::PointCloud2 const &cloud) const noexcept;
+        void accumulate_highres(sensor_msgs::PointCloud2 const &fullcloud, Rectangle const &rect, Color const &color) noexcept;
+        void accumulate_lowres(sensor_msgs::PointCloud2 const &fullcloud) noexcept;
+        void publish_state_cloud() noexcept;
 };

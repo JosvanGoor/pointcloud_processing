@@ -1,0 +1,38 @@
+<launch>
+
+    <arg name = "map" default = "map_sim"/>
+    <arg name = "mapping" default = "false"/>
+    <arg name = "rviz" default = "false" />
+
+    <!-- Run the sim -->
+    <include file = "$(find simulation)/launch/sim.launch">
+        <arg name = "robot" value = "tiago"/>
+    </include>
+
+    <!-- Run the map + nav -->
+    <group if = "$(eval mapping == false)">
+        <include file = "$(find navigation)/launch/tiago_nav.launch">
+            <arg name = "map" value = "$(arg map)"/>
+        </include>
+    </group>
+    
+    <group if = "$(eval mapping == true)">
+        <include file = "$(find pointcloud_poc)/launch/highres_gmapping.launch">
+            <arg name = "map_update_interval" default = "2.5"/>
+            <arg name = "srr" default = "0.1"/>
+            <arg name = "srt" default = "0.2"/>
+            <arg name = "str" default = "0.1"/>
+            <arg name = "stt" default = "0.2"/>
+            <arg name = "linearUpdate" default = "0.5"/>
+            <arg name = "angularUpdate" default = "0.25"/>
+        </include>
+    </group>
+
+    <!-- Run rviz -->
+    <group if = "$(eval rviz == true)">
+        <include file = "$(find pointcloud_poc)/launch/rviz.launch">
+        </include>
+    </group>
+
+</launch>
+

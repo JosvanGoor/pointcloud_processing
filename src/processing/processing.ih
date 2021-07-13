@@ -10,3 +10,20 @@ using namespace std;
 using namespace tf;
 
 using sensor_msgs::PointCloud2;
+
+inline Offsets get_offsets(PointCloud2::_fields_type const &fields) noexcept
+{
+    Offsets offsets{0, 4, 8};
+
+    for (auto const &field : fields)
+    {
+        if (field.name == "x")
+            offsets.offset_x = field.offset;
+        else if (field.name == "y")
+            offsets.offset_y = field.offset;
+        else if (field.name == "z")
+            offsets.offset_z = field.offset;
+    }
+    
+    return offsets;
+}
