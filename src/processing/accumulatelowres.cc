@@ -1,6 +1,6 @@
 #include "processing.ih"
 
-void Processing::accumulate_lowres(PointCloud2 const &cloud) noexcept
+void Processing::accumulate_lowres(PCLPointCloud2 const &cloud) noexcept
 {
     // PointCloud2 filtered;
     // pcl::VoxelGrid filter;
@@ -24,10 +24,10 @@ void Processing::accumulate_lowres(PointCloud2 const &cloud) noexcept
     search::KdTree<PointXYZRGB> kdtree;
     kdtree.setInputCloud(d_state_cloud);
 
-    for (size_t row = 0; row < cloud.height; row += 5)
+    for (size_t row = 0; row < cloud.height; row += 1)
     {
         size_t row_offset = row * cloud.row_step;
-        for (size_t col = 0; col < cloud.width; col += 5)
+        for (size_t col = 0; col < cloud.width; col += 1)
         {
             PointXYZRGB point;
             point.x = *reinterpret_cast<float const *>(cloud.data.data() + (row_offset + col * cloud.point_step + offsets.offset_x));

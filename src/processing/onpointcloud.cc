@@ -59,6 +59,16 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
         accumulate_highres(transformed, {xpos, ypos, width, height}, rgb);
     }
 
-    accumulate_lowres(transformed);
+    // for lowres we convert to PCL so we can use voxelgrid
+    PCLPointCloud2::Ptr pcl_cloud = boost::make_shared<PCLPointCloud2>();
+    toPCL(transformed, *pcl_cloud);
+
+    VoxelGrid<PCLPointCloud2> voxelgrid;
+    voxelgrid.setInputCloud(pcl_cloud);
+    voxelgrid.setLeafSize(d_lowres_distance, d_lowres_distance, d_lowres_distance);
+    voxelgrid.filter(*pcl_cloud);
+
+
+    accumulate_lowres(*pcl_cloud);
     publish_state_cloud();
 }

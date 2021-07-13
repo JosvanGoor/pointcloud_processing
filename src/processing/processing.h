@@ -30,6 +30,6 @@ class Processing
     private:
         std::vector<uint8_t> extract_image(sensor_msgs::PointCloud2 const &cloud) const noexcept;
         void accumulate_highres(sensor_msgs::PointCloud2 const &fullcloud, Rectangle const &rect, Color const &color) noexcept;
-        void accumulate_lowres(sensor_msgs::PointCloud2 const &fullcloud) noexcept;
+        void accumulate_lowres(pcl::PCLPointCloud2 const &fullcloud) noexcept;
         void publish_state_cloud() noexcept;
 };
