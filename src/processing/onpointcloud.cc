@@ -48,7 +48,7 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
     for (size_t idx = 0; idx < result->objects.size(); ++idx)
     {
         // object we dont care, just get a color for now
-        auto rgb = next_color(1.0, 1.0);
+        Color rgb = next_color(1.0, 1.0);
         int xpos = result->bbox[idx * 4 + 0];
         int ypos = result->bbox[idx * 4 + 1];
         int width = result->bbox[idx * 4 + 2];
@@ -67,7 +67,6 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
     voxelgrid.setInputCloud(pcl_cloud);
     voxelgrid.setLeafSize(d_lowres_distance, d_lowres_distance, d_lowres_distance);
     voxelgrid.filter(*pcl_cloud);
-
 
     accumulate_lowres(*pcl_cloud);
     publish_state_cloud();

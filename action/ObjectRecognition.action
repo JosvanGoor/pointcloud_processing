@@ -1,7 +1,9 @@
 # Goal
 sensor_msgs/Image image
---- #result
-int32[] bbox
-float32[] probabilities
-int32[] objects
---- #feedback
+--- # result
+int32[] bbox                # format: [x1, y1, width1, height1, x2, y2, width2, height2, ..., xN, yN, widthN, heightN]
+float32[] probabilities     # format: [prob1, prob2, ..., probN]
+int32[] objects             # format: [label1, label2, ..., labelN]
+--- # feedback
+
+# So a result with 1 bounding box will for example look like: bbox[100, 100, 50, 50], probabilities[0.81], objects[1]
