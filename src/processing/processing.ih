@@ -10,6 +10,10 @@ using namespace ros;
 using namespace std;
 using namespace tf;
 
+#include <pcl-1.9/pcl/segmentation/sac_segmentation.h>
+// #include <pcl-1.9/pcl/segmentation/extract_clusters.h>
+#include <pcl-1.9/pcl/filters/extract_indices.h>
+
 using sensor_msgs::PointCloud2;
 
 template <typename Ftype>

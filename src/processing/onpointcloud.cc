@@ -44,6 +44,10 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
     d_tflistener.waitForTransform(d_output_tf_frame, cloud.header.frame_id, Time(0), Duration(1.0));
     pcl_ros::transformPointCloud(d_output_tf_frame, cloud, transformed, d_tflistener);
 
+    // convert it to PCL
+    PointCloud<PointXYZRGB>::Ptr pcl_cloud = boost::make_shared<PointCloud<PointXYZRGB>>();
+    fromROSMsg(transformed, *pcl_cloud);
+
     // highres extract the boundig box stuff, and color it
     for (size_t idx = 0; idx < result->objects.size(); ++idx)
     {
@@ -56,18 +60,21 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
 
         cout << "bbox: RGB[" << int(rgb.red) << ", " << int(rgb.green) << ", " << int(rgb.blue) << "]";
         cout << " BBOX[x: " << xpos << ", y: " << ypos << ", w: " << width << ", h: " << height << "]\n";
-        accumulate_highres(transformed, {xpos, ypos, width, height}, rgb);
+        
+        // we need to do three things to the smol bbox
+        // Extract sub-cloud, remove surfaces, accumulate into the main cloud
+        PointCloud<PointXYZRGB>::Ptr object_cloud = cloud_from_bbox(*pcl_cloud, xpos, ypos, width, height);
+        cout << "bbox size after extraction: " << object_cloud->size() << "\n";
+        remove_surface(object_cloud);
+        cout << "bbox size after surface removal: " << object_cloud->size() << "\n";
+        // accumulate_highres(transformed, {xpos, ypos, width, height}, rgb);
+        accumulate(*object_cloud, rgb, d_lowres_distance / 20.0f);
     }
 
-    // for lowres we convert to PCL so we can use voxelgrid
-    PCLPointCloud2::Ptr pcl_cloud = boost::make_shared<PCLPointCloud2>();
-    toPCL(transformed, *pcl_cloud);
+    // voxel filter, then accumulate lowres stuff
+    voxel_filter(pcl_cloud, *pcl_cloud, d_lowres_distance);
+    accumulate(*pcl_cloud, {255, 255, 255}, d_lowres_distance);
 
-    VoxelGrid<PCLPointCloud2> voxelgrid;
-    voxelgrid.setInputCloud(pcl_cloud);
-    voxelgrid.setLeafSize(d_lowres_distance, d_lowres_distance, d_lowres_distance);
-    voxelgrid.filter(*pcl_cloud);
 
-    accumulate_lowres(*pcl_cloud);
     publish_state_cloud();
 }
