@@ -47,6 +47,8 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
     // convert it to PCL
     PointCloud<PointXYZRGB>::Ptr pcl_cloud = boost::make_shared<PointCloud<PointXYZRGB>>();
     fromROSMsg(transformed, *pcl_cloud);
+    PointCloud<PointXYZRGB>::Ptr surface_cloud = isolate_surface(pcl_cloud);
+    // accumulate(*surface_cloud, {255, 0, 0}, d_lowres_distance / 5.0);
 
     // highres extract the boundig box stuff, and color it
     for (size_t idx = 0; idx < result->objects.size(); ++idx)
@@ -64,10 +66,8 @@ void Processing::on_pointcloud(PointCloud2 const &cloud) noexcept
         // we need to do three things to the smol bbox
         // Extract sub-cloud, remove surfaces, accumulate into the main cloud
         PointCloud<PointXYZRGB>::Ptr object_cloud = cloud_from_bbox(*pcl_cloud, xpos, ypos, width, height);
-        cout << "bbox size after extraction: " << object_cloud->size() << "\n";
-        remove_surface(object_cloud);
-        cout << "bbox size after surface removal: " << object_cloud->size() << "\n";
-        // accumulate_highres(transformed, {xpos, ypos, width, height}, rgb);
+        filter_overlap(object_cloud, surface_cloud);
+        cout << "minicloud size after filter: " << object_cloud->size() << "\n";
         accumulate(*object_cloud, rgb, d_lowres_distance / 20.0f);
     }
 

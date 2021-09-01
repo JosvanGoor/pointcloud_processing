@@ -38,9 +38,10 @@ generate_messages(
 set(SOURCE_CODE
     src/main.cc
     src/processing/accumulate.cc
-    src/processing/accumulatehighres.cc
     src/processing/cloudfrombbox.cc
     src/processing/extractimage.cc
+    src/processing/filteroverlap.cc
+    src/processing/isolatesurface.cc
     src/processing/processing.cc
     src/processing/onpointcloud.cc
     src/processing/publishstatecloud.cc

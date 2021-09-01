@@ -1,7 +1,8 @@
 #include "processing.ih"
 
-void Processing::remove_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud) noexcept
+PointCloud<PointXYZRGB>::Ptr Processing::isolate_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud) noexcept
 {
+    PointCloud<PointXYZRGB>::Ptr rval = boost::make_shared<PointCloud<PointXYZRGB>>();
     ModelCoefficients coefficients;
     PointIndices::Ptr inliers = boost::make_shared<PointIndices>();
     SACSegmentation<PointXYZRGB> segmentation;
@@ -15,6 +16,7 @@ void Processing::remove_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cl
     ExtractIndices<PointXYZRGB> extraction;
     extraction.setInputCloud(cloud);
     extraction.setIndices(inliers);
-    extraction.setNegative(true);
-    extraction.filter(*cloud);
+    extraction.filter(*rval);
+
+    return rval;
 }

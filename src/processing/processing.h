@@ -28,12 +28,13 @@ class Processing
         void on_pointcloud(sensor_msgs::PointCloud2 const &cloud) noexcept;
 
     private:
-        std::vector<uint8_t> extract_image(sensor_msgs::PointCloud2 const &cloud) const noexcept;
-        void accumulate_highres(sensor_msgs::PointCloud2 const &fullcloud, Rectangle const &rect, Color const &color) noexcept;
         void publish_state_cloud() noexcept;
+        std::vector<uint8_t> extract_image(sensor_msgs::PointCloud2 const &cloud) const noexcept;
 
-        void remove_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud) noexcept;
+        pcl::PointCloud<pcl::PointXYZRGB>::Ptr isolate_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud) noexcept;
         pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_from_bbox(pcl::PointCloud<pcl::PointXYZRGB> const &in, int xpos, int ypos, int width, int height) noexcept;
+        void filter_overlap(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud, pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &filter) noexcept;
+        void remove_surface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &cloud) noexcept;
         void voxel_filter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr const &in, pcl::PointCloud<pcl::PointXYZRGB> &out, float min_distance) noexcept;
         void accumulate(pcl::PointCloud<pcl::PointXYZRGB> const &cloud, Color const &color, float min_distance) noexcept;
 };
