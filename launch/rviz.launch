@@ -1,0 +1,12 @@
+<launch>
+
+    <group>
+        <node
+            name = "rviz"
+            pkg = "rviz"
+            type = "rviz"
+            args = "-d $(find pointcloud_poc)/config/rviz.rviz"
+        />
+    </group>
+
+</launch>

@@ -16,4 +16,11 @@ To run the simulation can be started by using the following command:
 roslaunch simulation sim.launch robot:=tiago
 ```
 
+* Make a map stuff (Make sure its in the right folder)
+
+Then to run the navigation parts with the created map run
+```
+roslaunch navigation tiago_nav.launch map:=my_map
+```
+
 ## Action Message Structure
