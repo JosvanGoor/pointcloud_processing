@@ -5,6 +5,8 @@ add_compile_options(-std=c++11 -march=native)
 
 find_package(catkin REQUIRED COMPONENTS
     message_generation
+    genmsg
+    actionlib
     actionlib_msgs
     cv_bridge
     image_transport
@@ -35,6 +37,8 @@ generate_messages(
     std_msgs
 )
 
+catkin_package()
+
 set(SOURCE_CODE
     src/main.cc
     src/processing/accumulate.cc
@@ -61,3 +65,5 @@ add_executable(${PROJECT_NAME}_node ${SOURCE_CODE})
 target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
 )
+
+add_dependencies(${PROJECT_NAME}_node pointcloud_processing_generate_messages_cpp)

@@ -17,7 +17,7 @@
     </group>
     
     <group if = "$(eval mapping == true)">
-        <include file = "$(find pointcloud_poc)/launch/highres_gmapping.launch">
+        <include file = "$(find pointcloud_processing)/launch/highres_gmapping.launch">
             <arg name = "map_update_interval" default = "2.5"/>
             <arg name = "srr" default = "0.1"/>
             <arg name = "srt" default = "0.2"/>
@@ -30,8 +30,12 @@
 
     <!-- Run rviz -->
     <group if = "$(eval rviz == true)">
-        <include file = "$(find pointcloud_poc)/launch/rviz.launch">
-        </include>
+        <node
+            name = "rviz"
+            pkg = "rviz"
+            type = "rviz"
+            args = "-d $(find pointcloud_processing)/config/rviz_pointcloud.rviz"
+        />
     </group>
 
 </launch>
