@@ -47,3 +47,12 @@ The program waits for an bounding box action server before it starts running, a 
 The config used by the rviz launch file should show the default set topics.
 
 The pointcloud processing program gathers a low resolution point cloud, of the environment. When a bounding box is passed it stores a colored high resolution cloud. This will change into a labelled cloud + graph representation later on (but of course the project isn't finished yet at the moment).
+
+## Plans for the final program
+Tiago can drive around (either manually or autonomously) and map objects within a room. These objects will be registered in a scene graph like structure. 
+
+The object detection will be done in realtime by a SSD running on an action server.
+
+Currently we are looking into a way to remove surfaces under detected objects, but this would be an extention.
+
+In the final product we are planning to include some simple behaviours which can be asked to grasp known items (this would most likely be an adapted version of the behaviours written for Robotics for AI).
