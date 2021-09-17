@@ -1,0 +1,33 @@
+<launch>
+    <!-- <arg name = "" default = ""/> -->
+
+    <arg name = "scan" default = "scan_raw"/>
+
+    <!-- Setting arguments for the mapping stuff -->
+    <arg name = "map_update_interval" default = "5"/>
+    <arg name = "srr" default = "0.1"/>
+    <arg name = "srt" default = "0.2"/>
+    <arg name = "str" default = "0.1"/>
+    <arg name = "stt" default = "0.2"/>
+    <arg name = "linearUpdate" default = "1.0"/>
+    <arg name = "angularUpdate" default = "0.5"/>
+
+    <group>
+        <node 
+            pkg = "gmapping"
+            type = "slam_gmapping"
+            name = "slam_gmapping"
+            output = "screen"
+            args = "scan:=$(arg scan)"
+        >
+            <param name = "map_update_interval" value = "$(arg map_update_interval)"/>
+            <param name = "srr" value = "$(arg srr)"/>
+            <param name = "srt" value = "$(arg srt)"/>
+            <param name = "str" value = "$(arg str)"/>
+            <param name = "stt" value = "$(arg stt)"/>
+            <param name = "linearUpdate" value = "$(arg linearUpdate)"/>
+            <param name = "angularUpdate" value = "$(arg angularUpdate)"/>
+        </node>
+    </group>
+
+</launch>
