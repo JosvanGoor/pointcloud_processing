@@ -1,13 +1,24 @@
 <launch>
-
-    <arg name = "map" default = "map_sim"/>
-    <arg name = "mapping" default = "false"/>
+    <arg name = "map" default = "map_sim" />
+    <arg name = "mapping" default = "false" />
+    <arg name = "robot" default="tiago" />
     <arg name = "rviz" default = "false" />
+    <arg name = "sim" default = "true" />
+    
+    <env name="GAZEBO_MODEL_PATH" value="$(find simulation)/models"/>
 
     <!-- Run the sim -->
-    <include file = "$(find simulation)/launch/sim.launch">
-        <arg name = "robot" value = "tiago"/>
-    </include>
+    <group if = "$(eval sim == true)">
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="world_name" value="$(find pointcloud_processing)/worlds/explore_world.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+            <arg name="paused" value="false"/>
+            <arg name="use_sim_time" value="true"/>
+            <arg name="gui" value="true"/>
+            <arg name="recording" value="false"/>
+            <arg name="debug" value="false"/>
+        </include>
+        <include file = "$(find simulation)/launch/$(arg robot)_robot.launch"/>
+    </group>
 
     <!-- Run the map + nav -->
     <group if = "$(eval mapping == false)">
