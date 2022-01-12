@@ -20,14 +20,19 @@
         <include file = "$(find simulation)/launch/$(arg robot)_robot.launch"/>
     </group>
 
-    <!-- Run the map + nav -->
+    <!-- Run the map server + navigation -->
     <group if = "$(eval mapping == false)">
         <include file = "$(find navigation)/launch/tiago_nav.launch">
             <arg name = "map" value = "$(arg map)"/>
         </include>
     </group>
     
+    <!-- Run the gmapping with navigation -->
     <group if = "$(eval mapping == true)">
+        <!-- Remap the moveit nav output topic to the tiago input -->
+        <remap from="/cmd_vel" to="/mobile_base_controller/cmd_vel"/>
+
+        <!-- Run gmapping with custom settings -->
         <include file = "$(find pointcloud_processing)/launch/highres_gmapping.launch">
             <arg name = "map_update_interval" default = "2.5"/>
             <arg name = "srr" default = "0.1"/>
@@ -37,6 +42,21 @@
             <arg name = "linearUpdate" default = "0.5"/>
             <arg name = "angularUpdate" default = "0.25"/>
         </include>
+
+        <!-- Navigation Stack for use while gmapping / exploration -->
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" clear_params="true" output="screen">
+            <rosparam file="$(find navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+            <rosparam file="$(find navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+            <rosparam file="$(find navigation)/config/local_costmap_params.yaml" command="load" />
+            <rosparam file="$(find navigation)/config/global_costmap_params.yaml" command="load" />
+            <rosparam file="$(find navigation)/config/base_local_planner_params.yaml" command="load" />
+            <param name="base_local_planner" value="base_local_planner/TrajectoryPlannerROS" />
+            <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+            <param name="planner_frequency" value="5.0" />
+            <param name="controller_frequency" value="10" />
+            <param name="max_planning_retries" value="3" />
+            <param name="clearing_rotation_allowed" value="false" />
+	    </node>
     </group>
 
     <!-- Run rviz -->
